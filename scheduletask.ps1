@@ -11,7 +11,7 @@
 
 .COPYRIGHT The Unlicense
 
-.TAGS tasks scheduled
+.TAGS automation configuration windows
 
 .LICENSEURI https://unlicense.org/
 
@@ -38,7 +38,7 @@ Schedule a script as a task
 
 .DESCRIPTION
 Schedule a script as a task.
-This creates a script and a scheduled task that will run that script on machine start. 
+This creates a script and a scheduled task that will run that script on machine start.
 It can be run once, or at every start.
 The scheduled task generated script in turn runs an existing script in the file system.
 
