@@ -99,4 +99,4 @@ if ($SelfUnregister) {
     Write-Output "$unregisterCmd" | Out-File -Append -FilePath $TaskFilePath
 }
 
-schtasks /Create /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
+schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
