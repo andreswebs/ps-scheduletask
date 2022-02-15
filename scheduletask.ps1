@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 0.0.3
+.VERSION 0.0.4
 
 .GUID 77d80190-5d5e-425f-9c01-2fa883f0d199
 
@@ -78,7 +78,7 @@ Param (
     [ValidateNotNullOrEmpty()]
     [string] $TaskLogPath = "C:\$($TaskName).log",
 
-    [switch] $SelfUnregister = "$SetUnregister"
+    [switch] $SelfUnregister = $false
 
 )
 
