@@ -40,7 +40,7 @@ Schedule a script as a task
 Schedule a script as a task.
 This creates a script and a scheduled task that will run that script on machine start.
 It can be run once, or at every start.
-The scheduled task generated script in turn runs an existing script in the file system.
+The scheduled-task-generated script in turn runs an existing script in the file system.
 
 .PARAMETER TaskName
 Name of the scheduled task.
@@ -65,14 +65,12 @@ If set, the task will run once and then unregister itself.
 [CmdletBinding()]
 Param (
 
-    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
     [string]
-    $TaskName,
+    $TaskName = "$Env:TASK_NAME",
 
-    [Parameter(Mandatory)]
     [ValidateNotNullOrEmpty()]
-    [string] $TaskScriptPath,
+    [string] $TaskScriptPath = "$Env:TASK_SCRIPT_PATH",
 
     [ValidateNotNullOrEmpty()]
     [string] $TaskFilePath = "C:\$($TaskName).ps1",
@@ -80,11 +78,14 @@ Param (
     [ValidateNotNullOrEmpty()]
     [string] $TaskLogPath = "C:\$($TaskName).log",
 
-    [switch] $SelfUnregister = $false
+    [switch] $SelfUnregister = "$SetUnregister"
 
 )
 
-Write-Output @"
+$ErrorActionPreference = 'Stop'
+
+try {
+    Write-Output @"
 `$ErrorActionPreference = 'Stop'
 try {
     powershell.exe '$TaskScriptPath'
@@ -94,9 +95,15 @@ try {
 }
 "@ | Out-File -FilePath $TaskFilePath
 
-if ($SelfUnregister) {
-    $unregisterCmd = "Unregister-ScheduledTask -TaskName $TaskName -Confirm:`$false"
-    Write-Output "$unregisterCmd" | Out-File -Append -FilePath $TaskFilePath
+    if ("$Env:TASK_SELF_UNREGISTER" -or $SelfUnregister) {
+        $unregisterCmd = "Unregister-ScheduledTask -TaskName $TaskName -Confirm:`$false"
+        Write-Output "$unregisterCmd" | Out-File -Append -FilePath $TaskFilePath
+    }
+
+    schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
+
+} catch {
+    Write-Error -ErrorRecord $_
 }
 
-schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
+exit $LASTEXITCODE
