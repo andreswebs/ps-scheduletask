@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 0.0.4
+.VERSION 0.0.5
 
 .GUID 77d80190-5d5e-425f-9c01-2fa883f0d199
 
@@ -104,6 +104,7 @@ try {
 
 } catch {
     Write-Error -ErrorRecord $_
+    exit $LASTEXITCODE
 }
 
-exit $LASTEXITCODE
+
