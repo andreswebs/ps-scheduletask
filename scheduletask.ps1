@@ -87,12 +87,12 @@ Param (
 Write-Output @"
 `$ErrorActionPreference = 'Stop'
 try {
-    powershell.exe $TaskScriptPath
+    powershell.exe '$TaskScriptPath'
 } catch {
     Write-Output "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm K')] $TaskName Task Error: `$_" | Out-File -Append -FilePath '$TaskLogPath'
     Exit 1
 }
-"@ | Out-File -FilePath $filePath
+"@ | Out-File -FilePath $TaskFilePath
 
 if ($SelfUnregister) {
     $unregisterCmd = "Unregister-ScheduledTask -TaskName $TaskName -Confirm:`$false"
