@@ -57,6 +57,9 @@ Path to a file where the task will write error logs.
 .PARAMETER SelfUnregister
 If set, the task will run once and then unregister itself.
 
+.EXAMPLE
+.\scheduletask.ps1 -TaskName 'ExampleTask' -TaskScriptPath 'C:\scripts\example-script.ps1'
+
 #>
 
 [CmdletBinding()]
