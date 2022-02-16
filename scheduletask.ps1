@@ -103,8 +103,9 @@ try {
     schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
 
 } catch {
+    $errorCode = $LastExitCode
     Write-Error -ErrorRecord $_
-    exit $LASTEXITCODE
+    exit $errorCode
 }
 
 
