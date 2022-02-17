@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 0.0.6
+.VERSION 0.0.7
 
 .GUID 77d80190-5d5e-425f-9c01-2fa883f0d199
 
@@ -70,6 +70,7 @@ Param (
     $TaskName = "$Env:TASK_NAME",
 
     [ValidateNotNullOrEmpty()]
+    [ValidateScript ( { Test-Path $_ } ) ]
     [string] $TaskScriptPath = "$Env:TASK_SCRIPT_PATH",
 
     [ValidateNotNullOrEmpty()]
