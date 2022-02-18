@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 0.0.7
+.VERSION 0.0.8
 
 .GUID 77d80190-5d5e-425f-9c01-2fa883f0d199
 
@@ -89,7 +89,8 @@ try {
     Write-Output @"
 `$ErrorActionPreference = 'Stop'
 try {
-    powershell.exe '$TaskScriptPath'
+    Unblock-File -Path '$TaskScriptPath'
+    powershell.exe -command "& '$TaskScriptPath'"
 } catch {
     Write-Output "[`$(Get-Date -Format 'yyyy-MM-dd HH:mm K')] $TaskName Task Error: `$_" | Out-File -Append -FilePath '$TaskLogPath'
     Exit 1
@@ -101,12 +102,10 @@ try {
         Write-Output "$unregisterCmd" | Out-File -Append -FilePath $TaskFilePath
     }
 
-    schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
+    schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe -command `"& '$TaskFilePath'`"" /RU SYSTEM
 
 } catch {
     $errorCode = $LastExitCode
     Write-Error -ErrorRecord $_
     exit $errorCode
 }
-
-
