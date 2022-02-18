@@ -1,7 +1,7 @@
 
 <#PSScriptInfo
 
-.VERSION 0.0.9
+.VERSION 0.0.10
 
 .GUID 77d80190-5d5e-425f-9c01-2fa883f0d199
 
@@ -102,7 +102,7 @@ try {
         Write-Output "$unregisterCmd" | Out-File -Append -FilePath $TaskFilePath
     }
 
-    schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe -command `"& $TaskFilePath`"" /RU SYSTEM
+    schtasks /Create /F /TN "$TaskName" /SC onstart /TR "powershell.exe $TaskFilePath" /RU SYSTEM
 
 } catch {
     $errorCode = $LastExitCode
